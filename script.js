@@ -434,7 +434,7 @@ async function sendMessage() {
         if (!response.ok) {
             console.error('Erreur HTTP reçue de Make:', status, statusText, data || text);
             removeTypingIndicator(typingId);
-            addMessage(`❌ Erreur HTTP ${status} reçue de Make. Voir console pour détails.`, 'ai');
+            addMessage("Le service est momentanément indisponible.<br>Nous avons été alertés et intervenons pour rétablir l’accès.<br>Vous pouvez réessayer dans quelques minutes.", 'ai');
             return;
         }
         
