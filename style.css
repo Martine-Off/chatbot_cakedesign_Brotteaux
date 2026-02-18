@@ -1,16 +1,24 @@
-/* Import Georgia (système) et fallback serif */
-@import url('https://fonts.googleapis.com/css2?family=Bodoni+Moda:wght@400;500;600;700&display=swap');
+/* Import des polices : Poppins pour le texte, Playfair Display pour les titres */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Playfair+Display:wght@700&display=swap');
 
-/* Palette La Pâtisserie des Brotteaux */
+/* Nouvelle Palette Brotteaux */
 :root {
     --primary: #2c2c2c;
+    /* Noir du logo Brotteaux */
     --accent: #d4a574;
-    --secondary: #8b7355;
+    /* Doré/Bronze élégant pour les boutons */
+    --secondary: #666666;
+    /* Gris pour les textes secondaires */
     --light: #f5f0e8;
-    --white: #fafaf8;
-    --gradient-start: #f0c8a0;
-    --gradient-end: #d4a574;
-    --text: #2c2c2c;
+    /* Crème du fond de logo */
+    --white: #ffffff;
+    --gradient-start: #f5f0e8;
+    /* Bulles utilisateur (clair) */
+    --gradient-end: #e8dcc8;
+    --text: #1a1a1a;
+    /* Texte principal très sombre */
+    --font-title: 'Playfair Display', serif;
+    --font-body: 'Poppins', sans-serif;
 }
 
 * {
@@ -19,19 +27,23 @@
     box-sizing: border-box;
 }
 
-html,
-body {
-    height: 100%;
-    width: 100%;
-    overflow-x: hidden;
-    /* Empêche le débordement horizontal */
+html {
+    scroll-behavior: smooth;
+    height: auto;
+    /* Important : on laisse la page grandir */
 }
 
 body {
-    font-family: Georgia, 'Bodoni Moda', 'Times New Roman', serif;
-    background-color: var(--white);
+    font-family: var(--font-body);
+    background-color: #fdfbfb;
     color: var(--text);
     line-height: 1.8;
+    margin: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
+    /* On empêche le scroll horizontal */
+    overflow-y: visible;
+    /* On autorise le scroll vertical de la page */
 }
 
 /* ============================================
@@ -42,14 +54,13 @@ body {
 .wrapper {
     width: 100%;
     max-width: 1500px;
-    /* Garde une largeur max pour les très grands écrans */
     margin: 0 auto;
-    /* Centre le contenu */
     padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 24px;
-    /* Espace entre les blocs */
+    overflow: visible;
+    /* On laisse le contenu respirer */
 }
 
 /* Tous les conteneurs directs du wrapper sont maintenant des blocs simples */
@@ -83,11 +94,10 @@ body {
     flex-direction: column;
     background: var(--white);
     border-radius: 12px;
-    box-shadow: 0 4px 16px rgba(44, 44, 44, 0.08);
-    overflow: visible;
-    /* Changé de hidden à visible pour permettre le sticky */
-    border: 1px solid rgba(212, 165, 116, 0.15);
-    /* min-height: 70vh; a été supprimé pour résoudre le problème d'espacement */
+    box-shadow: 0 4px 16px rgba(74, 58, 78, 0.08);
+    overflow: hidden;
+    /* Changé de visible à hidden pour "emprisonner" le scroll interne */
+    border: 1px solid rgba(184, 165, 188, 0.15);
 }
 
 .notes-textarea {
@@ -97,7 +107,7 @@ body {
     border: 2px solid rgba(139, 115, 85, 0.2);
     border-radius: 10px;
     font-size: 14px;
-    font-family: Georgia, serif;
+    font-family: 'Poppins', serif;
     background-color: var(--white);
     resize: vertical;
     transition: border-color 0.3s, box-shadow 0.3s;
@@ -111,23 +121,26 @@ body {
 
 .header {
     background-color: var(--primary);
+    /* Rose poudré */
     color: var(--white);
-    padding: 24px 28px;
+    padding: 40px 20px;
+    /* On donne de l'air */
     text-align: center;
-    border-bottom: 2px solid var(--accent);
+    border-bottom: none;
+    /* On enlève la bordure marron du bas */
     flex-shrink: 0;
-    position: static;
-    top: auto;
-    z-index: auto;
 }
 
 .header h1 {
-    font-size: 26px;
-    font-weight: 400;
-    letter-spacing: 2px;
-    margin-bottom: 8px;
+    font-family: var(--font-title);
+    /* Playfair Display */
+    font-size: 34px;
+    /* Plus grand */
+    font-weight: 700;
+    letter-spacing: 4px;
+    /* Lettres très espacées */
+    margin-bottom: 12px;
     text-transform: uppercase;
-    font-family: 'Bodoni Moda', Georgia, serif;
 }
 
 .subtitle {
@@ -151,9 +164,6 @@ body {
     display: flex;
     gap: 12px;
     align-items: center;
-    position: static;
-    top: auto;
-    z-index: auto;
 }
 
 .name-input {
@@ -162,16 +172,16 @@ body {
     border: 2px solid rgba(139, 115, 85, 0.3);
     border-radius: 10px;
     font-size: 15px;
-    font-family: Georgia, serif;
+    font-family: 'Poppins', serif;
     transition: border-color 0.3s, box-shadow 0.3s, background-color 0.3s;
     background-color: var(--white);
 }
 
 .name-input:focus {
     outline: none;
-    border-color: var(--accent);
-    background-color: var(--white);
-    box-shadow: 0 0 0 4px rgba(212, 165, 116, 0.15);
+    border-color: var(--primary);
+    /* Bordure rose au clic */
+    box-shadow: 0 0 0 4px rgba(184, 141, 154, 0.1);
 }
 
 .name-input::placeholder {
@@ -180,38 +190,55 @@ body {
     font-style: italic;
 }
 
-.validate-name-btn {
-    padding: 14px 24px;
-    background: var(--accent);
-    color: var(--white);
-    border: none;
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: 500;
+/* --- HARMONISATION DES BOUTONS --- */
+.validate-name-btn,
+#sendBtn {
+    padding: 14px 28px !important;
+    /* Force la taille identique */
+    background-color: var(--accent) !important;
+    color: var(--white) !important;
+    border: none !important;
+    border-radius: 10px !important;
+    font-size: 14px !important;
+    font-family: var(--font-body) !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
     cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s, opacity 0.3s, background-color 0.3s;
+    transition: all 0.3s ease;
     white-space: nowrap;
-    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.validate-name-btn:hover:not(:disabled) {
+.validate-name-btn:hover:not(:disabled),
+#sendBtn:hover:not(:disabled) {
+    background-color: var(--primary) !important;
+    /* Devient rose au survol */
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(212, 165, 116, 0.25);
-    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+    box-shadow: 0 5px 15px rgba(184, 141, 154, 0.3);
 }
 
-.validate-name-btn:disabled {
-    opacity: 0.4;
+.validate-name-btn:disabled,
+#sendBtn:disabled {
+    opacity: 0.4 !important;
     cursor: not-allowed;
+    transform: none;
 }
 
 /* Encadré d'information boutique */
 .info-card {
-    background: linear-gradient(180deg, var(--white), var(--light));
-    border-left: 3px solid var(--accent);
-    padding: 20px 22px;
+    background: var(--white);
+    /* Blanc pur, pas de dégradé */
+    border-left: none;
+    /* On enlève l'ancienne bordure marron */
+    border-top: 3px solid var(--accent);
+    /* On met la barre dorée en haut */
+    padding: 24px;
     border-radius: 12px;
-    box-shadow: 0 3px 12px rgba(44, 44, 44, 0.06);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    /* Ombre plus douce */
     font-size: 13px;
     color: var(--text);
 }
@@ -233,17 +260,21 @@ body {
     width: auto;
     margin-bottom: 16px;
     display: block;
+    margin: 0 auto;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(44, 44, 44, 0.08);
 }
 
 .info-card h3 {
-    margin: 0 0 12px 0;
-    font-size: 17px;
-    color: var(--primary);
-    font-weight: 500;
-    letter-spacing: 1px;
+    margin: 0 0 16px 0;
+    font-size: 16px;
+    color: var(--text);
+    font-weight: 700;
+    letter-spacing: 2px;
     text-transform: uppercase;
+    font-family: var(--font-title);
+    /* Playfair Display */
+    text-align: center;
 }
 
 .info-card ul {
@@ -265,30 +296,44 @@ body {
 }
 
 .chat-box {
-    overflow-y: auto;
     padding: 28px;
     display: flex;
     flex-direction: column;
     gap: 18px;
     background: var(--white);
-    min-height: 300px;
+    height: 350px;
+    /* Hauteur fixe pour forcer le scroll interne */
+    overflow-y: auto;
+    /* Active le scroll vertical */
+    scroll-behavior: smooth;
 }
 
-.chat-box::-webkit-scrollbar {
-    width: 8px;
+/* Barres de scroll ultra-fines et minimalistes */
+::-webkit-scrollbar {
+    width: 2px !important;
+    /* Largeur d'un cheveu */
 }
 
-.chat-box::-webkit-scrollbar-track {
-    background: var(--light);
+::-webkit-scrollbar-track {
+    background: transparent !important;
+    /* Piste totalement invisible */
 }
 
-.chat-box::-webkit-scrollbar-thumb {
-    background: var(--accent);
-    border-radius: 4px;
+::-webkit-scrollbar-thumb {
+    background: rgba(212, 185, 150, 0.15) !important;
+    /* Beige doré très, très pâle */
+    border-radius: 10px !important;
 }
 
-.chat-box::-webkit-scrollbar-thumb:hover {
-    background: var(--secondary);
+::-webkit-scrollbar-thumb:hover {
+    background: var(--primary) !important;
+    /* Rose poudré uniquement quand on passe dessus */
+}
+
+/* Firefox : on force le mode le plus fin possible */
+* {
+    scrollbar-width: thin !important;
+    scrollbar-color: rgba(212, 185, 150, 0.15) transparent !important;
 }
 
 .message {
@@ -328,17 +373,19 @@ body {
 
 .message.user .bubble {
     background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-    color: var(--white);
+    color: var(--text);
+    /* Texte foncé pour plus de lisibilité sur le beige */
     border-bottom-right-radius: 6px;
-    box-shadow: 0 3px 12px rgba(212, 165, 116, 0.18);
+    box-shadow: 0 3px 12px rgba(212, 185, 150, 0.2);
 }
 
 .message.ai .bubble {
     background: var(--light);
-    color: var(--primary);
+    color: var(--text);
     border-bottom-left-radius: 6px;
-    box-shadow: 0 3px 12px rgba(44, 44, 44, 0.06);
-    border: 1px solid rgba(139, 115, 85, 0.12);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(184, 141, 154, 0.15);
+    /* Bordure rose très fine */
 }
 
 .typing-indicator {
@@ -425,14 +472,16 @@ body {
     font-size: 15px;
     outline: none;
     transition: border-color 0.3s, box-shadow 0.3s, opacity 0.3s;
-    font-family: Georgia, serif;
+    font-family: 'Poppins', serif;
     background-color: var(--white);
     min-width: 0;
 }
 
 #messageInput:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 4px rgba(212, 165, 116, 0.12);
+    outline: none;
+    border-color: var(--primary);
+    /* Bordure rose au clic */
+    box-shadow: 0 0 0 4px rgba(184, 141, 154, 0.1);
 }
 
 #messageInput:disabled {
@@ -446,37 +495,15 @@ body {
     font-style: italic;
 }
 
-#sendBtn {
-    padding: 14px 28px;
-    background: var(--accent);
-    color: var(--white);
-    border: none;
-    border-radius: 10px;
-    font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s, opacity 0.3s, background 0.3s;
-    letter-spacing: 0.5px;
-}
-
-#sendBtn:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(212, 165, 116, 0.25);
-    background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-}
-
-#sendBtn:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-}
 
 /* --- Calendrier --- */
 #calendar-container {
     background: var(--white);
     border-radius: 12px;
     padding: 20px;
-    box-shadow: 0 3px 12px rgba(44, 44, 44, 0.06);
-    border: 1px solid rgba(212, 165, 116, 0.15);
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(184, 141, 154, 0.15);
+    /* Bordure rose fine */
 }
 
 .calendar-header {
@@ -487,25 +514,32 @@ body {
 }
 
 .calendar-month-year {
-    font-weight: normal;
-    font-size: 1em;
-    color: #4a3f35;
+    font-family: var(--font-title);
+    /* Playfair Display */
+    font-weight: 700;
+    font-size: 1.2em;
+    color: var(--primary);
+    /* Rose poudré */
+    text-transform: capitalize;
 }
 
 .calendar-nav {
-    background: #c9a978;
+    background: var(--accent) !important;
     border: none;
     color: white;
-    width: 24px;
-    height: 24px;
-    border-radius: 4px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    /* Boutons ronds comme sur la maquette */
     cursor: pointer;
-    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: background 0.3s;
 }
 
 .calendar-nav:hover:not(:disabled) {
-    background: #b8976a;
+    background: var(--primary) !important;
 }
 
 .calendar-nav:disabled {
@@ -521,44 +555,45 @@ body {
 }
 
 .calendar-table th {
-    padding: 8px;
-    text-align: center;
-    font-weight: normal;
-    color: #4a3f35;
-    border-bottom: 2px solid #e8dcc8;
-    font-size: 1em;
+    font-family: var(--font-body);
+    color: var(--secondary);
+    border-bottom: 2px solid var(--light);
+    padding: 10px 5px;
+    font-size: 0.9em;
+    font-weight: 600;
 }
 
 .calendar-table td {
-    padding: 10px;
-    text-align: center;
-    border: 1px solid #f5f0e8;
-    color: #4a3f35;
-    font-size: 1em;
+    font-family: var(--font-body);
+    color: var(--text);
+    padding: 8px;
+    /* Un peu moins d'espace pour compacter */
+    border: none;
+    font-size: 0.85em;
+    /* Taille réduite pour les chiffres des dates */
 }
 
 .calendar-table td:empty {
     border: none;
 }
 
+/* Le lundi n'est plus coloré en marron, on reste sobre */
 .calendar-table td.monday {
-    background-color: #e8dcc8;
+    background-color: transparent;
+    color: var(--primary);
+    font-weight: 500;
 }
 
 .calendar-table td.highlighted {
     position: relative;
 }
 
+/* Le cercle du jour sélectionné (ex: le 5 décembre) */
 .calendar-table td.highlighted::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 32px;
-    height: 32px;
-    border: 2px solid #b8976a;
-    border-radius: 50%;
+    border: 2px solid var(--primary) !important;
+    /* Cercle rose */
+    width: 28px;
+    height: 28px;
 }
 
 /* Nouveau conteneur pour la colonne de gauche */
@@ -585,83 +620,223 @@ body {
    RESPONSIVE - AJOUT DE LA GRILLE POUR DESKTOP
    ============================================ */
 
+/* ============================================
+   RESPONSIVITÉ FINALE - MAISON ROSALIE
+   ============================================ */
+
 @media (min-width: 1024px) {
     .wrapper {
         display: grid;
+        /* On élargit un peu les colonnes pour que tout rentre (300px) */
         grid-template-columns: 300px 1fr 300px;
-        /* 3 colonnes */
         grid-template-rows: auto auto auto;
-        /* 3 lignes auto-dimensionnées */
+        column-gap: 40px;
+        row-gap: 20px;
+        padding: 40px;
         align-items: start;
-        /* Aligne les blocs en haut de leur cellule de grille */
-        column-gap: 24px;
-        /* Espace horizontal entre les colonnes */
-        row-gap: 16px;
-        /* Espace vertical entre les lignes */
+        /* Aligne tout en haut au départ */
     }
 
-    .sidebar-left {
-        grid-column: 1;
+    .sidebar-left,
+    .sidebar-left,
+    .notes-column {
         grid-row: 1 / 4;
-        position: sticky;
-        top: 20px;
-        max-height: calc(100vh - 40px);
-        overflow-y: auto;
-        align-self: start;
+        position: relative !important;
+        /* On annule le sticky */
+        top: 0 !important;
+        /* On annule le décalage */
+        height: auto !important;
+        /* Elles prennent leur taille naturelle */
+        max-height: none !important;
+        /* On ne limite plus la hauteur */
+        overflow: visible !important;
+        /* On enlève le scroll interne */
+    }
+}
+
+/* On garde la structure du milieu */
+.chat-container,
+.notes-section,
+.disclaimer-section {
+    grid-column: 2;
+}
+
+.sidebar-left::-webkit-scrollbar,
+.notes-column::-webkit-scrollbar {
+    display: none;
+}
+
+.sidebar-left {
+    grid-column: 1;
+}
+
+.notes-column {
+    grid-column: 3;
+}
+
+.chat-container,
+.notes-section,
+.disclaimer-section {
+    grid-column: 2;
+    width: 100%;
+}
+
+/* On s'assure que Monsieur Rossi ne pousse pas les murs */
+.rossi-img {
+    max-width: 150px;
+    height: auto;
+}
+
+/* Ajustements spécifiques pour MOBILE (moins de 1024px) */
+@media (max-width: 1023px) {
+    .wrapper {
+        display: flex;
+        /* On oublie la grille compliquée ici */
+        flex-direction: column;
+        /* On empile tout proprement */
+        padding: 15px;
+        gap: 20px;
+
+        .header {
+            padding: 15px 10px !important;
+        }
+
+        .header h1 {
+            font-size: 18px !important;
+            letter-spacing: 2px !important;
+            margin-bottom: 5px !important;
+        }
+
+        .subtitle {
+            font-size: 11px !important;
+            line-height: 1.3 !important;
+        }
+
+        /* On empile le champ 'nom' et son bouton */
+        .name-input-section {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 10px;
+            padding: 15px !important;
+        }
+
+        /* Le bouton prend toute la largeur pour être facile à cliquer */
+        .validate-name-btn {
+            width: 50% !important;
+            margin: 0 auto !important;
+            display: block;
+        }
+
+        /* On empile le champ de message et le bouton envoyer */
+        .input-area {
+            flex-direction: column !important;
+            gap: 10px;
+            padding: 10px 15px !important;
+        }
+
+        /* Le bouton Envoyer passe à 50% et se centre */
+        #sendBtn {
+            width: 50% !important;
+            margin: 0 auto !important;
+            /* Centrage horizontal */
+            padding: 12px !important;
+        }
+
+        /* On s'assure que le champ de texte prend bien toute la place */
+        #messageInput {
+            width: 100% !important;
+        }
+
+        /* Réduction chirurgicale des polices pour mobile */
+        #messageInput,
+        .name-input,
+        .bubble,
+        .notes-textarea,
+        .info-card {
+            font-size: 14px !important;
+        }
+
+        /* On réduit la hauteur du chat pour que l'écran ne soit pas noyé */
+        .chat-box {
+            height: 250px !important;
+            padding: 15px !important;
+            /* On réduit aussi les marges internes */
+        }
+
+        /* On réduit l'image de Monsieur Rossi pour gagner de l'espace vertical */
+        .rossi-img {
+            width: 80px !important;
+            height: 80px !important;
+            margin-bottom: 10px !important;
+        }
+    }
+
+    .sidebar-left,
+    .notes-column,
+    .chat-container {
+        grid-column: auto !important;
+        /* On annule les ordres de placement */
+        width: 100%;
+    }
+
+    .info-card-logo,
+    .rossi-img {
+        margin: 0 auto 15px auto !important;
+        /* Force le centrage horizontal */
+        display: block;
+    }
+
+    .info-card h3 {
+        text-align: center;
+        /* Titres centrés sur mobile */
     }
 
     .chat-container {
-        grid-column: 2;
-        grid-row: 1;
-        display: flex;
-        flex-direction: column;
-        max-height: calc(100vh - 40px);
-        overflow-y: auto;
+        order: -1;
+        /* Remonte le chat juste après le logo */
     }
 
-    .chat-column {
-        flex: 1;
+    /* --- Étape 6 : Respiration des bulles (ICI) --- */
+    .bubble {
+        max-width: 90% !important;
+        /* Plus de largeur pour le texte */
+        padding: 12px 16px !important;
+        /* Un peu moins de rembourrage */
+        font-size: 14px !important;
+        /* Texte légèrement plus petit pour mobile */
     }
+}
 
-    .header {
-        position: sticky;
-        top: 0;
-        width: 100%;
-        z-index: 1;
-    }
+.rossi-img {
+    width: 100px;
+    /* Plus petite sur mobile */
+    height: 100px;
+}
 
-    .name-input-section {
-        position: sticky;
-        top: 0;
-        width: 100%;
-        z-index: 1;
-    }
+.header h1 {
+    font-size: 24px;
+    letter-spacing: 2px;
+}
 
-    .chat-box {
-        min-height: 300px;
-        overflow: visible;
-    }
+/* Style du nouveau logo Maison Rosalie */
+.info-card-logo {
+    height: auto;
+    width: 100%;
+    /* Prend toute la largeur de la carte */
+    max-width: 180px;
+    margin: 0 auto 20px auto;
+    box-shadow: none;
+    /* On enlève l'ombre portée pour un look plus épuré */
+}
 
-    .notes-section {
-        grid-column: 2;
-        grid-row: 2;
-        position: static;
-        align-self: start;
-        justify-self: stretch;
-    }
-
-    .disclaimer-section {
-        grid-column: 2;
-        grid-row: 3;
-    }
-
-    .notes-column {
-        grid-column: 3;
-        grid-row: 1 / 4;
-        position: sticky;
-        top: 20px;
-        max-height: calc(100vh - 40px);
-        overflow-y: auto;
-        align-self: start;
-    }
+/* Style pour la photo de Monsieur Rossi */
+.rossi-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    /* Image parfaitement ronde */
+    border: 3px solid var(--accent);
+    display: block;
+    margin: 0 auto 20px auto;
+    object-fit: cover;
 }
