@@ -107,18 +107,37 @@ document.addEventListener('DOMContentLoaded', async () => {
                 return;
             }
             try {
-                await navigator.clipboard.writeText(JSON.stringify(lastPayload, null, 2));
-                copyPayloadBtn.textContent = 'Copié ✅';
-                setTimeout(() => copyPayloadBtn.textContent = 'Copier dernier payload', 1500);
-            } catch (e) {
-                console.warn('Impossible de copier le payload dans le presse-papier', e);
-                if (debugPayloadPre) {
-                    const range = document.createRange();
-                    range.selectNodeContents(debugPayloadPre);
-                    const sel = window.getSelection();
-                    sel.removeAllRanges();
-                    sel.addRange(range);
+                // 1. On bloque le bouton immédiatement pour éviter le double-clic
+                const confirmBtn = document.getElementById('confirmFinish');
+                if (confirmBtn) confirmBtn.disabled = true;
+                confirmBtn.textContent = "Envoi en cours...";
+
+                // 2. On appelle Make
+                const response = await fetch(WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payloadFinal)
+                });
+
+                if (response.ok) {
+                    // 3. ON RÉCUPÈRE LA RÉPONSE DU WEBHOOK
+                    const responseText = await response.text();
+
+                    // 4. ON L'AFFICHE DANS LE CHAT (C'est le message de Make !)
+                    await displayProgressively(responseText, 'ai');
+
+                    // 5. ON VERROUILLE DÉFINITIVEMENT
+                    const input = document.getElementById('messageInput');
+                    input.disabled = true;
+                    input.placeholder = "Épreuve terminée. Correction reçue.";
+                    if (document.getElementById('sendBtn')) document.getElementById('sendBtn').disabled = true;
+                } else {
+                    addMessage("❌ Erreur : Le service de correction n'a pas répondu.", 'ai');
                 }
+
+            } catch (e) {
+                console.error("Erreur lors de l'envoi final", e);
+                addMessage("❌ Erreur de connexion au serveur.", 'ai');
             }
         });
     }
@@ -287,8 +306,14 @@ async function sendMessage() {
     const message = messageInput.value.trim();
 
     if (!message) return;
+    // --- CHIRURGIE V4 : INTERCEPTION ---
+    if (message.toLowerCase().includes("devis")) {
+        ouvrirConfirmation(message);
+        return; // On arrête là, la popup prend le relais
+    }
+    // ------------------------------------
 
-    if (WEBHOOK_URL === 'YOUR_MAKE_WEBHOOK_URL_HERE') {
+    if (WEBHOOK_URL === 'https://hook.eu1.make.com/hnafrokq43x9kb3ls450r4fw7injhdgi') {
         alert('⚠️ Veuillez configurer votre URL webhook Make dans script.js');
         return;
     }
@@ -631,4 +656,84 @@ function renderCalendar(date) {
 
     html += '</tbody></table></div>';
     calendarContainer.innerHTML = html;
+}
+/**
+ * Affiche la popup de confirmation et envoie le dossier complet à Make
+ */
+function ouvrirConfirmation(messageUtilisateur) {
+    const overlay = document.createElement('div');
+    overlay.className = 'f-modal-overlay';
+    overlay.innerHTML = `
+        <div class="f-modal-box">
+            <h3 style="font-family: var(--font-title); color: var(--primary); margin-top:0;">Confirmation</h3>
+            <p>Voulez-vous clôturer cet échange et envoyer votre proposition pour <strong>correction</strong> ?</p>
+            <div class="f-modal-actions">
+                <button class="f-btn f-btn-main" id="confirmFinish">Envoyer</button>
+                <button class="f-btn f-btn-sec" id="cancelFinish" style="font-size:12px;">
+    Continuer l'exercice
+</button>
+
+
+            </div>
+        </div>
+    `;
+    document.body.appendChild(overlay);
+
+    // Focus immédiat sur le bouton pour valider avec Entrée
+    overlay.querySelector('#confirmFinish').focus();
+    // Annuler : on ferme la popup et l'élève peut modifier son texte
+    overlay.querySelector('#cancelFinish').onclick = () => overlay.remove();
+
+    // Envoyer : on prépare le payload avec les 8 variables
+    overlay.querySelector('#confirmFinish').onclick = async () => {
+        overlay.remove();
+        // 1. On affiche le message et on bloque tout de suite
+        addMessage(messageUtilisateur, 'user');
+        const input = document.getElementById('messageInput');
+        input.disabled = true;
+        input.placeholder = "Correction en cours..."; // Feedback visuel
+
+        // Incrémentation pour le dernier message de l'exercice
+        messageCounter++;
+
+        // Récupération des notes en temps réel
+        const notesText = document.getElementById('notesTextarea') ? document.getElementById('notesTextarea').value : "";
+
+        // Préparation du Payload ultra-complet
+        const payloadFinal = {
+            conversationId: conversationId,
+            messageId: messageCounter,
+            clientName: clientName,
+            chatbotName: chatbotName,
+            action: "CORRECTION", // TON FILTRE MAKE
+            message: messageUtilisateur,
+            timestamp: new Date().toLocaleString('fr-FR', {
+                day: 'numeric', month: 'long', year: 'numeric',
+                hour: '2-digit', minute: '2-digit'
+            }),
+            note: notesText
+        };
+
+        const typingId = showTypingIndicator(); // Lance l'animation des points
+        try {
+            // 1. On envoie et ON CAPTURE la réponse dans une variable
+            const response = await fetch(WEBHOOK_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payloadFinal)
+            });
+
+            // 2. Si ça a marché, on lit le texte renvoyé par Make
+            if (response.ok) {
+                removeTypingIndicator(typingId);                // 1. On enlève les ...
+                const textReponse = await response.text();      // 2. On récupère le texte de Make
+                await displayProgressively(textReponse, 'ai');  // 3. On l'affiche
+            }
+
+
+        } catch (e) {
+            console.error("Erreur lors de l'envoi final", e);
+            alert("Erreur de connexion lors de l'envoi.");
+        }
+    };
 }

@@ -21,6 +21,93 @@
     --font-body: 'Poppins', sans-serif;
 }
 
+/* --- STYLE POPUP DE CONFIRMATION (V4) --- */
+.f-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(44, 44, 44, 0.8);
+    /* Utilise ton --primary avec transparence */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    backdrop-filter: blur(3px);
+}
+
+.f-modal-box {
+    background: var(--white);
+    padding: 32px;
+    border-radius: 12px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    max-width: 420px;
+    width: 90%;
+    text-align: center;
+    border: 2px solid var(--accent);
+    /* Ton doré Brotteaux */
+    animation: fPop 0.3s ease-out;
+}
+
+@keyframes fPop {
+    from {
+        transform: scale(0.9);
+        opacity: 0;
+    }
+
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.f-modal-box p {
+    font-family: var(--font-body);
+    font-size: 17px;
+    color: var(--primary);
+    margin-bottom: 28px;
+    line-height: 1.6;
+}
+
+.f-modal-actions {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+}
+
+.f-btn {
+    padding: 12px 24px;
+    border-radius: 4px;
+    /* Plus carré pour le côté chic */
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: var(--font-body);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+}
+
+.f-btn-main {
+    background: var(--accent);
+    /* Ton doré */
+    color: var(--white);
+}
+
+.f-btn-sec {
+    background: var(--light);
+    /* Ton crème */
+    color: var(--primary);
+    border: 1px solid var(--secondary);
+}
+
+.f-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
 * {
     margin: 0;
     padding: 0;
