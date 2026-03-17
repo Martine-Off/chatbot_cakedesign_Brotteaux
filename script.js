@@ -313,11 +313,6 @@ async function sendMessage() {
     }
     // ------------------------------------
 
-    if (WEBHOOK_URL === 'https://hook.eu1.make.com/hnafrokq43x9kb3ls450r4fw7injhdgi') {
-        alert('⚠️ Veuillez configurer votre URL webhook Make dans script.js');
-        return;
-    }
-
     // Afficher le message de l'utilisateur
     addMessage(message, 'user');
     messageInput.value = '';
